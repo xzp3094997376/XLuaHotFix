@@ -19,7 +19,7 @@ namespace Tutorial
         void Start()
         {
             luaenv = new LuaEnv();
-            luaenv.DoString("require 'byfile'");
+            luaenv.DoString("require('byfile').Test");
         }
 
         // Update is called once per frame

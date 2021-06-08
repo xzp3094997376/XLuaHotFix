@@ -36,9 +36,17 @@ namespace XLuaTest
         private Action luaOnDestroy;
 
         private LuaTable scriptEnv;
-
-        void Awake()
+        public void Init(TextAsset _tx,Injection[] _injects)
         {
+            luaScript  = _tx;
+            injections = _injects;
+            InitAwake();
+        }
+
+        void InitAwake()
+        {
+           
+
             scriptEnv = luaEnv.NewTable();
 
             // 为每个脚本设置一个独立的环境，可一定程度上防止脚本间全局变量、函数冲突
@@ -50,15 +58,18 @@ namespace XLuaTest
             scriptEnv.Set("self", this);
             foreach (var injection in injections)
             {
+                Debug.Log(injection.value);
                 scriptEnv.Set(injection.name, injection.value);
             }
 
-            luaEnv.DoString(luaScript.text, "LuaTestScript", scriptEnv);
+            luaEnv.DoString(luaScript.text, "LuaTest", scriptEnv);
 
             Action luaAwake = scriptEnv.Get<Action>("awake");
             scriptEnv.Get("start", out luaStart);
             scriptEnv.Get("update", out luaUpdate);
             scriptEnv.Get("ondestroy", out luaOnDestroy);
+
+            Debug.Log(luaAwake == null);
 
             if (luaAwake != null)
             {

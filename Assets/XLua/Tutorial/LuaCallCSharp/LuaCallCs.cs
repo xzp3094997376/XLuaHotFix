@@ -78,12 +78,12 @@ namespace Tutorial
 
 		public void TestFunc(int i)
 		{
-			Debug.Log("TestFunc(int i)");
+			Debug.Log($"TestFunc(int {i})");
 		}
 
 		public void TestFunc(string i)
 		{
-			Debug.Log("TestFunc(string i)");
+			Debug.Log($"TestFunc(string {i})");
 		}
 
 		public static DerivedClass operator +(DerivedClass a, DerivedClass b)
@@ -182,7 +182,7 @@ namespace Tutorial
 public class LuaCallCs : MonoBehaviour
 {
 	LuaEnv luaenv = null;
-	string script = @"
+	string script1 = @"
         function demo()
             --new C#对象
             local newGameObj = CS.UnityEngine.GameObject()
@@ -292,8 +292,19 @@ public class LuaCallCs : MonoBehaviour
        assert(coroutine.resume(co))
     ";
 
-	// Use this for initialization
-	void Start()
+    string script = @"
+           --重载方法调用
+          local testobj=CS.Tutorial.DerivedClass()   
+          local co = coroutine.create(function()
+              print('yiled ------------------------------------------------------')     
+              coroutine.yield()
+              print('restart')
+          end)
+          assert(coroutine.resume(co))
+    ";
+
+    // Use this for initialization
+    void Start()
 	{
 		luaenv = new LuaEnv();
 		luaenv.DoString(script);
@@ -310,6 +321,6 @@ public class LuaCallCs : MonoBehaviour
 
 	void OnDestroy()
 	{
-		luaenv.Dispose();
+		luaenv?.Dispose();
 	}
 }

@@ -127,3 +127,15 @@ namespace Tutorial
         }
     }
 }
+
+interface IInterface
+{
+    void A();
+}
+class MyClass:IInterface
+{
+    public void A()
+    {
+
+    }
+}

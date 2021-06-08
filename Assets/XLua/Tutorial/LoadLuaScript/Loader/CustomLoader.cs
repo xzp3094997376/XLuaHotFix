@@ -9,6 +9,7 @@
 using UnityEngine;
 using System.Collections;
 using XLua;
+using System;
 
 namespace Tutorial
 {
@@ -23,12 +24,15 @@ namespace Tutorial
             {
                 if (filename == "InMemory")
                 {
-                    string script = "return {ccc = 9999}";
+                    string script = "tab={} return {ccc = 9999}; tab.func = 10";
                     return System.Text.Encoding.UTF8.GetBytes(script);
                 }
                 return null;
             });
             luaenv.DoString("print('InMemory.ccc=', require('InMemory').ccc)");
+            LuaTable lt = luaenv.Global.Get<LuaTable>("tab");
+            int obj = lt.Get <int>("func");
+            Debug.Log(obj);
         }
 
         // Update is called once per frame
